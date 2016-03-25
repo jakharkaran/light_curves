@@ -29,6 +29,7 @@ print "We have considered a black body at a temperature of %s" %temperature
 print "Wavelength at the maximum value of flux is %s or %s" %(wavemax_SI, wavemax)
 print "Total radiated flux = %s" %(const.sigma_sb * (temperature ** 4))
 
+# Plotting flux vs wavelength
 fig, ax = plt.subplots(figsize=(8, 5))
 ax.plot(waveset_SI.value, flux_SI.value)
 ax.axvline(wavemax_SI.value, ls='--')
@@ -47,10 +48,11 @@ plt.show()
 R = const.R_sun / 2.0
 r = 10.0 * const.pc
 
-# Funtion for calculating flux of different filters recieved by detectors on the earth
-def blackbody_filter(wave_centre, wave_bandwidth, temperature):
 
-	waveset_filter = np.logspace(np.log10(wave_centre - wave_bandwidth / 2), np.log10(wave_centre + wave_bandwidth / 2), num=100) * u.AA
+def blackbody_filter(wave_centre, wave_bandwidth, temperature):
+	# Funtion for calculating flux of different filters recieved by detectors on the earth
+
+	waveset_filter = np.linspace((wave_centre - wave_bandwidth / 2), (wave_centre + wave_bandwidth / 2), num=100) * u.AA
 	waveset_filter_SI = waveset_filter.to(SI_convert_m)
 
 	with np.errstate(all='ignore'):
@@ -67,8 +69,9 @@ def blackbody_filter(wave_centre, wave_bandwidth, temperature):
 
 	return area
 
-# Function for calculating magnitude of star 
+
 def magnitude_star(flux_object, flux_reference_object):
+	# Function for calculating magnitude of star 
 
 	# According to the Johnson System star Vega is considered as reference for all filters
 	magnitude_reference = 0
@@ -100,7 +103,7 @@ magnitude_b = magnitude_star(flux_b, flux_earth_b)
 
 print "The magnitude for Blue filter is %s" %magnitude_b
 
-# For Violet filter
+# For Visual filter
 
 wavelength_v = 5483.0 * u.AA
 wave_bandwidth_v = 827.0 * u.AA
@@ -109,7 +112,7 @@ flux_earth_v = 3.55 * 0.827 * 10.0 ** (-9) * (u.W / u.meter ** 2)
 flux_v = blackbody_filter(wavelength_v.value, wave_bandwidth_v.value, temperature)
 magnitude_v = magnitude_star(flux_v, flux_earth_v)
 
-print "The magnitude for Violet filter is %s" %magnitude_v
+print "The magnitude for Visual filter is %s" %magnitude_v
 
 # For Red filter
 
